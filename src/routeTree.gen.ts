@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ReportRouteImport } from './routes/report'
+import { Route as QuantRouteImport } from './routes/quant'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as BacktestRouteImport } from './routes/backtest'
 import { Route as AppRouteImport } from './routes/app'
@@ -22,6 +23,11 @@ import { Route as ApiBinanceDepthRouteImport } from './routes/api/binance/depth'
 const ReportRoute = ReportRouteImport.update({
   id: '/report',
   path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuantRoute = QuantRouteImport.update({
+  id: '/quant',
+  path: '/quant',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompareRoute = CompareRouteImport.update({
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRoute
   '/backtest': typeof BacktestRoute
   '/compare': typeof CompareRoute
+  '/quant': typeof QuantRoute
   '/report': typeof ReportRoute
   '/api/binance/depth': typeof ApiBinanceDepthRoute
   '/api/binance/klines': typeof ApiBinanceKlinesRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppRoute
   '/backtest': typeof BacktestRoute
   '/compare': typeof CompareRoute
+  '/quant': typeof QuantRoute
   '/report': typeof ReportRoute
   '/api/binance/depth': typeof ApiBinanceDepthRoute
   '/api/binance/klines': typeof ApiBinanceKlinesRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/backtest': typeof BacktestRoute
   '/compare': typeof CompareRoute
+  '/quant': typeof QuantRoute
   '/report': typeof ReportRoute
   '/api/binance/depth': typeof ApiBinanceDepthRoute
   '/api/binance/klines': typeof ApiBinanceKlinesRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/backtest'
     | '/compare'
+    | '/quant'
     | '/report'
     | '/api/binance/depth'
     | '/api/binance/klines'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/backtest'
     | '/compare'
+    | '/quant'
     | '/report'
     | '/api/binance/depth'
     | '/api/binance/klines'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/backtest'
     | '/compare'
+    | '/quant'
     | '/report'
     | '/api/binance/depth'
     | '/api/binance/klines'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   BacktestRoute: typeof BacktestRoute
   CompareRoute: typeof CompareRoute
+  QuantRoute: typeof QuantRoute
   ReportRoute: typeof ReportRoute
   ApiBinanceDepthRoute: typeof ApiBinanceDepthRoute
   ApiBinanceKlinesRoute: typeof ApiBinanceKlinesRoute
@@ -154,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/report'
       fullPath: '/report'
       preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quant': {
+      id: '/quant'
+      path: '/quant'
+      fullPath: '/quant'
+      preLoaderRoute: typeof QuantRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compare': {
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
   BacktestRoute: BacktestRoute,
   CompareRoute: CompareRoute,
+  QuantRoute: QuantRoute,
   ReportRoute: ReportRoute,
   ApiBinanceDepthRoute: ApiBinanceDepthRoute,
   ApiBinanceKlinesRoute: ApiBinanceKlinesRoute,

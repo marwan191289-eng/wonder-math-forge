@@ -139,6 +139,12 @@ function Header() {
             البث المباشر مفعل
           </div>
           <Link
+            to="/quant"
+            className="text-[11px] mono px-2.5 py-1.5 rounded-md border border-cyan-500/40 bg-gradient-to-r from-cyan-500/15 to-fuchsia-500/15 text-cyan-200 hover:from-cyan-500/25 hover:to-fuchsia-500/25 flex items-center gap-1.5 shadow-[0_0_12px_rgba(34,211,238,0.15)]"
+          >
+            <Gauge className="size-3.5" /> Quant Terminal
+          </Link>
+          <Link
             to="/backtest"
             className="text-[11px] mono px-2.5 py-1.5 rounded-md border border-border bg-card/60 hover:bg-card flex items-center gap-1.5"
           >

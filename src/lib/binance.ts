@@ -13,7 +13,7 @@ export const binanceProxy = createServerFn({ method: "GET" })
     return r.json();
   });
 
-// ── Symbols (added ETCUSDT, SLXUSDT) ───────────────────────────────────────
+// ── Symbols ────────────────────────────────────────────────────────────────
 export const SYMBOLS = [
   "BTCUSDT",
   "ETHUSDT",
@@ -24,8 +24,7 @@ export const SYMBOLS = [
   "LTCUSDT",
   "BCHUSDT",
   "AAVEUSDT",
-  "ETCUSDT",   // added
-  "SLXUSDT",   // added
+  "ETCUSDT",
 ] as const;
 
 export type Symbol = (typeof SYMBOLS)[number];

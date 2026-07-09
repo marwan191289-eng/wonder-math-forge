@@ -8,8 +8,11 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import appCss from "../styles.css?url";
+import "../i18n";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 function NotFoundComponent() {
   return (
@@ -113,7 +116,17 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
+      <FloatingLanguageSwitcher />
       <Outlet />
     </QueryClientProvider>
+  );
+}
+
+function FloatingLanguageSwitcher() {
+  useTranslation(); // subscribe to language changes
+  return (
+    <div className="fixed bottom-4 left-4 z-[60] print:hidden">
+      <LanguageSwitcher />
+    </div>
   );
 }

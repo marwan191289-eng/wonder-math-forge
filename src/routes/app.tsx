@@ -41,7 +41,7 @@ import { useQualitySlopeAlert } from "@/hooks/useQualitySlopeAlert";
 import { useSession } from "@/lib/session-store";
 import { cn } from "@/lib/utils";
 import { RLAgentPanel } from "@/components/trading/RLAgentPanel";
-import { Radio, Zap, BookOpen, Crosshair, LineChart, FileText, Sliders, FlaskConical, AlertTriangle, GitCompare, Activity } from "lucide-react";
+import { Radio, Zap, BookOpen, Crosshair, LineChart, FileText, Sliders, FlaskConical, AlertTriangle, GitCompare, Activity, Gauge } from "lucide-react";
 
 export const Route = createFileRoute("/app")({
   head: () => ({

@@ -116,7 +116,17 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
+      <FloatingLanguageSwitcher />
       <Outlet />
     </QueryClientProvider>
+  );
+}
+
+function FloatingLanguageSwitcher() {
+  useTranslation(); // subscribe to language changes
+  return (
+    <div className="fixed bottom-4 left-4 z-[60] print:hidden">
+      <LanguageSwitcher />
+    </div>
   );
 }

@@ -16,7 +16,7 @@ import {
   Pivot
 } from './types'; // ✅ B3: استيراد جميع الأنواع المطلوبة
 
-import { calculateATR, zScore, mean, stdDev } from '../utils/math';
+import { calculateATR, zScore, mean, stdDev } from './math';
 import { getDynamicPivotParams, getPivotPoints } from './pivots';
 import { matchElliottWaves } from './elliottEngine';
 import { analyzeCVD } from './cvdEngine';

@@ -1,7 +1,7 @@
 // src/engine/pivots.ts
 
 import { Candle, Pivot } from './types';
-import { calculateATR, calculateSmaSlope } from '../utils/math';
+import { calculateATR, calculateSmaSlope } from './math';
 
 export interface PivotParams {
   leftBars: number;

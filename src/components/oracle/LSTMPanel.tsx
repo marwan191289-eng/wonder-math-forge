@@ -1,7 +1,7 @@
 // components/LSTMPanel.tsx
 
 import React from 'react';
-import { LSTMPrediction } from '../engine/types';
+import { LSTMPrediction } from '@/engines/types';
 
 interface LSTMPanelProps {
   prediction: LSTMPrediction | null;

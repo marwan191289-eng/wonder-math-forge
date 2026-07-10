@@ -1,7 +1,7 @@
 // src/engine/orderBlockEngine.ts
 
 import { Candle, Pivot, OrderBlock, ElliottResult, CVDResult } from './types';
-import { calculateATR } from '../utils/math';
+import { calculateATR } from './math';
 
 function precomputeAvgVolume(candles: Candle[], period: number = 20): number[] {
   const avgs: number[] = new Array(candles.length);

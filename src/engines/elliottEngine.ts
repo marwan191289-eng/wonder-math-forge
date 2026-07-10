@@ -1,7 +1,7 @@
 // src/engine/elliottEngine.ts
 
 import { Pivot, Wave, WaveSequence, ElliottResult, Projection, AnalysisContext } from './types';
-import { fibonacciScore, calculateATR } from '../utils/math';
+import { fibonacciScore, calculateATR } from './math';
 
 function dynamicBeamWidth(pivotCount: number): number {
   return Math.max(4, Math.min(8, Math.round(pivotCount / 10)));

@@ -1,7 +1,7 @@
 // src/engine/fvgEngine.ts
 
 import { Candle, FairValueGap } from './types';
-import { mean, stdDev } from '../utils/math';
+import { mean, stdDev } from './math';
 
 export function detectFairValueGaps(candles: Candle[]): FairValueGap[] {
   const fvgs: FairValueGap[] = [];

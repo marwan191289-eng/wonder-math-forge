@@ -1,6 +1,6 @@
 // utils/math.ts
 
-import { Candle } from '../engine/types';
+import { Candle } from './types';
 
 export function calculateATR(candles: Candle[], period: number = 14): number {
   if (candles.length < period + 1) return 0;

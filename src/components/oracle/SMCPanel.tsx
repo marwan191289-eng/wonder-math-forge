@@ -1,7 +1,7 @@
 // src/components/SMCPanel.tsx
 
 import React from 'react';
-import { SMCResult } from '../engine/types';
+import { SMCResult } from '@/engines/types';
 
 interface SMCPanelProps {
   smc: SMCResult | null;

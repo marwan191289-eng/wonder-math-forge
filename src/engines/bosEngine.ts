@@ -1,7 +1,7 @@
 // src/engine/bosEngine.ts
 
 import { Candle, Pivot, BreakOfStructure } from './types';
-import { calculateATR } from '../utils/math';
+import { calculateATR } from './math';
 
 export function detectBreakOfStructure(
   candles: Candle[],

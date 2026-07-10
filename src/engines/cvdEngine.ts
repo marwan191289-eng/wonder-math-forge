@@ -1,7 +1,7 @@
 // src/engine/cvdEngine.ts
 
 import { Candle, Pivot, CVDResult, AnalysisContext } from './types';
-import { calculateATR, calculateSmaSlope } from '../utils/math';
+import { calculateATR, calculateSmaSlope } from './math';
 
 function estimateDelta(candle: Candle): number {
   if (candle.takerBuyVolume !== undefined && candle.volume > 0) {

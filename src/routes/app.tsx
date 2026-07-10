@@ -145,6 +145,12 @@ function Header() {
             <Gauge className="size-3.5" /> Quant Terminal
           </Link>
           <Link
+            to="/oracle"
+            className="text-[11px] mono px-2.5 py-1.5 rounded-md border border-emerald-500/40 bg-gradient-to-r from-emerald-500/15 to-teal-500/15 text-emerald-200 hover:from-emerald-500/25 hover:to-teal-500/25 flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.15)]"
+          >
+            🧬 Oracle
+          </Link>
+          <Link
             to="/backtest"
             className="text-[11px] mono px-2.5 py-1.5 rounded-md border border-border bg-card/60 hover:bg-card flex items-center gap-1.5"
           >

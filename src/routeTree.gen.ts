@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as QuantRouteImport } from './routes/quant'
+import { Route as OracleRouteImport } from './routes/oracle'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as BacktestRouteImport } from './routes/backtest'
 import { Route as AppRouteImport } from './routes/app'
@@ -28,6 +29,11 @@ const ReportRoute = ReportRouteImport.update({
 const QuantRoute = QuantRouteImport.update({
   id: '/quant',
   path: '/quant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OracleRoute = OracleRouteImport.update({
+  id: '/oracle',
+  path: '/oracle',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompareRoute = CompareRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRoute
   '/backtest': typeof BacktestRoute
   '/compare': typeof CompareRoute
+  '/oracle': typeof OracleRoute
   '/quant': typeof QuantRoute
   '/report': typeof ReportRoute
   '/api/binance/depth': typeof ApiBinanceDepthRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppRoute
   '/backtest': typeof BacktestRoute
   '/compare': typeof CompareRoute
+  '/oracle': typeof OracleRoute
   '/quant': typeof QuantRoute
   '/report': typeof ReportRoute
   '/api/binance/depth': typeof ApiBinanceDepthRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/backtest': typeof BacktestRoute
   '/compare': typeof CompareRoute
+  '/oracle': typeof OracleRoute
   '/quant': typeof QuantRoute
   '/report': typeof ReportRoute
   '/api/binance/depth': typeof ApiBinanceDepthRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/backtest'
     | '/compare'
+    | '/oracle'
     | '/quant'
     | '/report'
     | '/api/binance/depth'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/backtest'
     | '/compare'
+    | '/oracle'
     | '/quant'
     | '/report'
     | '/api/binance/depth'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/backtest'
     | '/compare'
+    | '/oracle'
     | '/quant'
     | '/report'
     | '/api/binance/depth'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   BacktestRoute: typeof BacktestRoute
   CompareRoute: typeof CompareRoute
+  OracleRoute: typeof OracleRoute
   QuantRoute: typeof QuantRoute
   ReportRoute: typeof ReportRoute
   ApiBinanceDepthRoute: typeof ApiBinanceDepthRoute
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/quant'
       fullPath: '/quant'
       preLoaderRoute: typeof QuantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oracle': {
+      id: '/oracle'
+      path: '/oracle'
+      fullPath: '/oracle'
+      preLoaderRoute: typeof OracleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compare': {
@@ -240,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
   BacktestRoute: BacktestRoute,
   CompareRoute: CompareRoute,
+  OracleRoute: OracleRoute,
   QuantRoute: QuantRoute,
   ReportRoute: ReportRoute,
   ApiBinanceDepthRoute: ApiBinanceDepthRoute,
@@ -250,3 +271,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

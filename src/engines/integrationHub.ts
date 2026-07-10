@@ -205,7 +205,7 @@ function detectConfluence(
   halfLife: number = 10
 ): ConfluenceSignal | null {
   if (elliottEndpoints.length === 0 || cvdPivots.length === 0) return null;
-  let bestSignal = null;
+  let bestSignal: ConfluenceSignal | null = null;
   let bestScore = -Infinity;
   const stats = divergenceStore.getStats();
 

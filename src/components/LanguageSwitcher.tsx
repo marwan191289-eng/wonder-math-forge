@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Languages } from "lucide-react";
 import { LANGUAGES, RTL_LANGS } from "@/i18n";
@@ -12,7 +12,12 @@ import { Button } from "@/components/ui/button";
 
 export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const { i18n } = useTranslation();
+  const [hydrated, setHydrated] = useState(false);
   const current = LANGUAGES.find((l) => l.code === i18n.language) ?? LANGUAGES[0];
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -31,8 +36,8 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
           aria-label="Change language"
         >
           <Languages className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">{current.flag}</span>
-          {!compact && <span>{current.native}</span>}
+          <span className="hidden sm:inline" suppressHydrationWarning>{hydrated ? current.flag : ""}</span>
+          {!compact && <span suppressHydrationWarning>{hydrated ? current.native : ""}</span>}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-h-80 overflow-y-auto">

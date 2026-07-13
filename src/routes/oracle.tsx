@@ -1,12 +1,14 @@
 // Oracle: Elliott + CVD + SMC + LSTM unified analytical engine.
-// All inputs are REAL Binance klines (with takerBuyBase for CVD).
+// All inputs are REAL Binance klines (WS-streamed rolling window of 300 candles,
+// with takerBuyBase for CVD). Each engine is invoked independently on the same
+// candles snapshot — no cross-engine mutation.
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { runFullAnalysis } from "@/engines/integrationHub";
-import { DivergenceStore, type Candle, type FullAnalysisResult } from "@/engines/types";
+import { DivergenceStore, type FullAnalysisResult } from "@/engines/types";
 import { SMCPanel } from "@/components/oracle/SMCPanel";
 import { LSTMPanel } from "@/components/oracle/LSTMPanel";
+import { useRollingCandles } from "@/hooks/useRollingCandles";
 
 export const Route = createFileRoute("/oracle")({
   component: OraclePage,
@@ -26,24 +28,7 @@ const INTERVALS = [
   { v: "1d", h: 24 },
 ] as const;
 
-interface KlinesResp {
-  klines: Array<{
-    openTime: number; open: number; high: number; low: number; close: number;
-    volume: number; takerBuyBase: number;
-  }>;
-}
-
-async function fetchOracleCandles(symbol: string, interval: string, limit = 500): Promise<Candle[]> {
-  const r = await fetch(`/api/binance/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`);
-  if (!r.ok) throw new Error(`klines ${r.status}`);
-  const j = (await r.json()) as KlinesResp;
-  return j.klines.map((k) => ({
-    time: k.openTime,
-    open: k.open, high: k.high, low: k.low, close: k.close,
-    volume: k.volume,
-    takerBuyVolume: k.takerBuyBase,
-  }));
-}
+const WINDOW_SIZE = 300;
 
 function OraclePage() {
   const [symbol, setSymbol] = useState<string>("BTCUSDT");
@@ -53,15 +38,22 @@ function OraclePage() {
   const [analyzing, setAnalyzing] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  const { data: candles, isLoading, error: qErr } = useQuery({
-    queryKey: ["oracle-klines", symbol, interval.v],
-    queryFn: () => fetchOracleCandles(symbol, interval.v, 500),
-    refetchInterval: 15_000,
-    staleTime: 10_000,
-  });
+  const { candles, status, lastTickAt, error: streamErr } =
+    useRollingCandles(symbol, interval.v, WINDOW_SIZE);
 
+  // Reset per-symbol/interval divergence store so engines don't mix contexts.
+  useEffect(() => {
+    storeRef.current = new DivergenceStore();
+  }, [symbol, interval.v]);
+
+  // Throttle heavy analysis: only re-run when we actually have candles and not more
+  // than once per 1.5s, so browser stays responsive even on fast tick streams.
+  const lastRunRef = useRef<number>(0);
   useEffect(() => {
     if (!candles || candles.length < 60) return;
+    const now = Date.now();
+    if (now - lastRunRef.current < 1500 && result) return;
+    lastRunRef.current = now;
     let cancelled = false;
     setAnalyzing(true);
     setErr(null);
@@ -71,6 +63,10 @@ function OraclePage() {
       .finally(() => { if (!cancelled) setAnalyzing(false); });
     return () => { cancelled = true; };
   }, [candles, interval.h]);
+
+  const isLoading = candles.length === 0;
+  const qErr = streamErr ? new Error(streamErr) : null;
+
 
   const last = candles?.[candles.length - 1];
   const summary = useMemo(() => {
@@ -94,7 +90,10 @@ function OraclePage() {
             🧬 Oracle <span className="text-slate-500 text-base font-normal">Elliott · CVD · SMC · LSTM</span>
           </h1>
           <p className="text-xs text-slate-500">
-            Deterministic multi-engine analysis on live Binance klines. 500 candles, 500 ms compute budget.
+            Live Binance WebSocket · rolling {WINDOW_SIZE}-candle window · ≤500 ms compute budget · engines run independently on the same snapshot.
+          </p>
+          <p className="text-[10px] text-slate-600 mt-0.5 font-mono">
+            stream: {status}{lastTickAt ? ` · last tick ${new Date(lastTickAt).toLocaleTimeString()}` : ""}
           </p>
         </div>
         <nav className="flex gap-2 text-xs">

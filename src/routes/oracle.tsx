@@ -90,7 +90,10 @@ function OraclePage() {
             🧬 Oracle <span className="text-slate-500 text-base font-normal">Elliott · CVD · SMC · LSTM</span>
           </h1>
           <p className="text-xs text-slate-500">
-            Deterministic multi-engine analysis on live Binance klines. 500 candles, 500 ms compute budget.
+            Live Binance WebSocket · rolling {WINDOW_SIZE}-candle window · ≤500 ms compute budget · engines run independently on the same snapshot.
+          </p>
+          <p className="text-[10px] text-slate-600 mt-0.5 font-mono">
+            stream: {status}{lastTickAt ? ` · last tick ${new Date(lastTickAt).toLocaleTimeString()}` : ""}
           </p>
         </div>
         <nav className="flex gap-2 text-xs">
